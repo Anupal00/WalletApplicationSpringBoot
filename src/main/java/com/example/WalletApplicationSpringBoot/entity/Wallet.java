@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -14,5 +14,18 @@ import javax.persistence.Entity;
 @Builder
 public class Wallet {
 
-    private 
+    @Id
+    @SequenceGenerator(
+            name = "account_sequence",
+            sequenceName = "account_sequence"
+    )
+    @GeneratedValue(
+            generator = "account_sequence",
+            strategy = GenerationType.SEQUENCE
+    )
+    private Long walletAccountNo;
+    private String firstName;
+    private String lastName;
+    private String address;
+    private Long balance;
 }
