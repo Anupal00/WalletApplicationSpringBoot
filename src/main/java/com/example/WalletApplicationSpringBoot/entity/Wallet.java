@@ -24,7 +24,7 @@ public class Wallet {
             generator = "wallet_sequence",
             strategy = GenerationType.SEQUENCE
     )
-    private Long walletAccountNo;
+    private Long walletNo;
     private String firstName;
     private String lastName;
     private String address;
@@ -37,12 +37,12 @@ public class Wallet {
             nullable = false
     )
     private String password;
-    @OneToMany(
-            cascade = CascadeType.ALL
-    )
-    @JoinColumn(
-            name = "wallet_no",
-            referencedColumnName = "walletAccountNo"
-    )
-    private List<Transaction> transactionList;
+//    @OneToMany(
+//            cascade = CascadeType.ALL
+//    )
+//    @JoinColumn(
+//            name = "wallet_no",
+//            referencedColumnName = "walletNo"
+//    )
+//    private List<Transaction> transactionList;
 }

@@ -32,5 +32,13 @@ public class Transaction {
     private Date date;
     private Time time;
     private String status;
+    @ManyToOne(
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn(
+            name = "wallet_no",
+            referencedColumnName = "walletNo"
+    )
+    private Wallet wallet;
 
 }

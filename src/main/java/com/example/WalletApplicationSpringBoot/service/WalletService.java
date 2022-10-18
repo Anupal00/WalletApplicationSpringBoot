@@ -14,6 +14,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,7 +38,8 @@ public class WalletService {
     }
 
     public Wallet getWallet(WalletVerify walletVerify) {
-        return walletRepository.findByUserNameAndPassword(walletVerify.getUserName(), walletVerify.getPassword()).orElseThrow(()->new IllegalStateException("Not found"));
+        return walletRepository.findByUserNameAndPassword(walletVerify.getUserName(), walletVerify.getPassword())
+                .orElseThrow(()->new IllegalStateException("Not found"));
     }
 
     public Double getBalance(WalletVerify walletVerify) {
@@ -46,8 +48,9 @@ public class WalletService {
     }
 
     public String depositAmount(TransactionModel transactionModel) {
-        Double balance = walletRepository.findByUserNameAndPassword(transactionModel.getUserName(), transactionModel.getPassword())
-                .orElseThrow(()->new IllegalStateException("Not found")).getBalance();
+        Wallet wallet = walletRepository.findByUserNameAndPassword(transactionModel.getUserName(), transactionModel.getPassword())
+                .orElseThrow(()->new IllegalStateException("Not found"));
+        Double balance = wallet.getBalance();
         balance = balance + transactionModel.getAmount();
         int status  = walletRepository.updateWalletByBalance(balance, transactionModel.getUserName(), transactionModel.getPassword());
         if(status==1){
@@ -57,7 +60,9 @@ public class WalletService {
                     .date(Date.valueOf(LocalDate.now()))
                     .time(Time.valueOf(LocalTime.now()))
                     .status("Success")
+                    .wallet(wallet)
                     .build();
+            transactionRepository.save(transaction);
             return "Success";
         }
         else{
@@ -66,8 +71,17 @@ public class WalletService {
                     .date(Date.valueOf(LocalDate.now()))
                     .time(Time.valueOf(LocalTime.now()))
                     .status("Failed")
+                    .wallet(wallet)
                     .build();
+            transactionRepository.save(transaction);
             return "Failed";
         }
+    }
+
+    public List<Transaction> showTransactionList(WalletVerify walletVerify) {
+        Wallet wallet = walletRepository.findByUserNameAndPassword(walletVerify.getUserName(), walletVerify.getPassword())
+                .orElseThrow(()->new IllegalStateException("Not found"));
+        System.out.println(wallet);
+        return transactionRepository.findAllByWalletNo(wallet.getWalletNo());
     }
 }
