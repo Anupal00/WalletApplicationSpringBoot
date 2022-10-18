@@ -26,4 +26,10 @@ public class WalletController {
         return walletService.getWallet(walletVerify);
     }
 
+    @PostMapping("/checkBalance")
+    public Long getBalance(@RequestBody WalletVerify walletVerify){
+        return walletService.getBalance(walletVerify);
+    }
+
+
 }

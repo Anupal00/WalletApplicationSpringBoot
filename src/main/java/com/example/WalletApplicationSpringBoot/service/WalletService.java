@@ -34,4 +34,9 @@ public class WalletService {
     public Wallet getWallet(WalletVerify walletVerify) {
         return walletRepository.findByUserNameAndPassword(walletVerify.getUserName(), walletVerify.getPassword()).orElseThrow(()->new IllegalStateException("Not found"));
     }
+
+    public Long getBalance(WalletVerify walletVerify) {
+        return walletRepository.findByUserNameAndPassword(walletVerify.getUserName(), walletVerify.getPassword())
+                .orElseThrow(()->new IllegalStateException("Not found")).getBalance();
+    }
 }
