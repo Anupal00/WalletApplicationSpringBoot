@@ -29,6 +29,14 @@ public class Wallet {
     private String lastName;
     private String address;
     private Long balance;
+    @Column(
+            nullable = false
+    )
+    private String userName;
+    @Column(
+            nullable = false
+    )
+    private String password;
     @OneToMany(
             cascade = CascadeType.ALL
     )

@@ -1,11 +1,11 @@
 package com.example.WalletApplicationSpringBoot.controller;
 
 import com.example.WalletApplicationSpringBoot.entity.Wallet;
+import com.example.WalletApplicationSpringBoot.exception.PasswordException;
+import com.example.WalletApplicationSpringBoot.exception.UserNameException;
 import com.example.WalletApplicationSpringBoot.service.WalletService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import model.WalletVerify;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/wallet/")
@@ -16,9 +16,14 @@ public class WalletController {
         this.walletService = walletService;
     }
 
-    @PostMapping
-    public Wallet createWallet(@RequestBody Wallet wallet){
-        return walletService.createWallet(wallet);
+    @PostMapping("/createAccount")
+    public Wallet saveWallet(@RequestBody Wallet wallet) throws UserNameException, PasswordException {
+        return walletService.saveWallet(wallet);
+    }
+
+    @PostMapping("/accountDetails")
+    public Wallet getWallet(@RequestBody WalletVerify walletVerify){
+        return walletService.getWallet(walletVerify);
     }
 
 }
