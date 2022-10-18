@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,11 +17,11 @@ public class Wallet {
 
     @Id
     @SequenceGenerator(
-            name = "account_sequence",
-            sequenceName = "account_sequence"
+            name = "wallet_sequence",
+            sequenceName = "wallet_sequence"
     )
     @GeneratedValue(
-            generator = "account_sequence",
+            generator = "wallet_sequence",
             strategy = GenerationType.SEQUENCE
     )
     private Long walletAccountNo;
@@ -28,4 +29,12 @@ public class Wallet {
     private String lastName;
     private String address;
     private Long balance;
+    @OneToMany(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name = "wallet_no",
+            referencedColumnName = "walletAccountNo"
+    )
+    private List<Transaction> transactionList;
 }

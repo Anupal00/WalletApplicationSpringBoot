@@ -27,4 +27,5 @@ public class Transaction {
     private Long amount;
     private Date date;
     private Time time;
+
 }
