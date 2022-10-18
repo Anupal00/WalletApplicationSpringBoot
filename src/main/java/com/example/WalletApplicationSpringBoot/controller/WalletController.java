@@ -2,6 +2,7 @@ package com.example.WalletApplicationSpringBoot.controller;
 
 import com.example.WalletApplicationSpringBoot.entity.Transaction;
 import com.example.WalletApplicationSpringBoot.entity.Wallet;
+import com.example.WalletApplicationSpringBoot.exception.InsufficientBalanceException;
 import com.example.WalletApplicationSpringBoot.exception.PasswordException;
 import com.example.WalletApplicationSpringBoot.exception.UserNameException;
 import com.example.WalletApplicationSpringBoot.service.WalletService;
@@ -43,6 +44,11 @@ public class WalletController {
     @GetMapping("/transactionList")
     public List<Transaction> showTransactionList(@RequestBody WalletVerify walletVerify){
         return walletService.showTransactionList(walletVerify);
+    }
+
+    @PostMapping("/withdrawal")
+    public String withdrawalAmount(@RequestBody TransactionModel transactionModel) throws InsufficientBalanceException {
+        return walletService.withdrawalAmount(transactionModel);
     }
 
 }

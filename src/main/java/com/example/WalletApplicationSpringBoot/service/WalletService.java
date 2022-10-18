@@ -2,6 +2,7 @@ package com.example.WalletApplicationSpringBoot.service;
 
 import com.example.WalletApplicationSpringBoot.entity.Transaction;
 import com.example.WalletApplicationSpringBoot.entity.Wallet;
+import com.example.WalletApplicationSpringBoot.exception.InsufficientBalanceException;
 import com.example.WalletApplicationSpringBoot.exception.PasswordException;
 import com.example.WalletApplicationSpringBoot.exception.UserNameException;
 import com.example.WalletApplicationSpringBoot.repository.TransactionRepository;
@@ -83,5 +84,35 @@ public class WalletService {
                 .orElseThrow(()->new IllegalStateException("Not found"));
         System.out.println(wallet);
         return transactionRepository.findAllByWalletNo(wallet.getWalletNo());
+    }
+
+    public String withdrawalAmount(TransactionModel transactionModel) throws InsufficientBalanceException{
+        Wallet wallet = walletRepository.findByUserNameAndPassword(transactionModel.getUserName(), transactionModel.getPassword())
+                .orElseThrow(()->new IllegalStateException("Not found"));
+        Double balance = wallet.getBalance();
+        if(balance < transactionModel.getAmount()){
+            Transaction transaction = Transaction.builder()
+                    .wallet(wallet)
+                    .withdrawal(transactionModel.getAmount())
+                    .balance(balance)
+                    .date(Date.valueOf(LocalDate.now()))
+                    .time(Time.valueOf(LocalTime.now()))
+                    .status("Failed")
+                    .build();
+            transactionRepository.save(transaction);
+            throw new InsufficientBalanceException("Insufficient Balance");
+        }
+        balance = balance - transactionModel.getAmount();
+        walletRepository.updateWalletByBalance(balance, transactionModel.getUserName(), transactionModel.getPassword());
+        Transaction transaction = Transaction.builder()
+                .wallet(wallet)
+                .withdrawal(transactionModel.getAmount())
+                .balance(balance)
+                .date(Date.valueOf(LocalDate.now()))
+                .time(Time.valueOf(LocalTime.now()))
+                .status("Success")
+                .build();
+        transactionRepository.save(transaction);
+        return "Success";
     }
 }
