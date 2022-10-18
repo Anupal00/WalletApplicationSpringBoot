@@ -1,6 +1,7 @@
 package com.example.WalletApplicationSpringBoot.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.sql.Time;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Transaction {
 
     @Id
@@ -24,8 +26,11 @@ public class Transaction {
             strategy = GenerationType.SEQUENCE
     )
     private Long transactionId;
-    private Long amount;
+    private Double deposit;
+    private Double withdrawal;
+    private Double balance;
     private Date date;
     private Time time;
+    private String status;
 
 }

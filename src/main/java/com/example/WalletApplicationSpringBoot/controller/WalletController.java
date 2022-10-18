@@ -4,6 +4,7 @@ import com.example.WalletApplicationSpringBoot.entity.Wallet;
 import com.example.WalletApplicationSpringBoot.exception.PasswordException;
 import com.example.WalletApplicationSpringBoot.exception.UserNameException;
 import com.example.WalletApplicationSpringBoot.service.WalletService;
+import model.TransactionModel;
 import model.WalletVerify;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,13 @@ public class WalletController {
     }
 
     @PostMapping("/checkBalance")
-    public Long getBalance(@RequestBody WalletVerify walletVerify){
+    public Double getBalance(@RequestBody WalletVerify walletVerify){
         return walletService.getBalance(walletVerify);
     }
 
+    @PostMapping("/deposit")
+    public String depositAmount(@RequestBody TransactionModel transactionModel){
+        return walletService.depositAmount(transactionModel);
+    }
 
 }

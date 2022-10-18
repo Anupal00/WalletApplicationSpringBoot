@@ -28,7 +28,7 @@ public class Wallet {
     private String firstName;
     private String lastName;
     private String address;
-    private Long balance;
+    private Double balance;
     @Column(
             nullable = false
     )
